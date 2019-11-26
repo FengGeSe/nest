@@ -1,26 +1,22 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/urfave/cli/v2"
 )
 
-var rootApp = &cli.App{
-	Name:    "nest",
-	Version: "v1.0.0",
-	Usage:   "Nest is a tool for helping develop with go-kit app framework.",
+func init() {
+
+}
+
+var App = &cli.App{
+	Name:  "nest",
+	Usage: "Nest is a tool for helping develop with go-kit app framework.",
 	Action: func(c *cli.Context) error {
-		fmt.Println("boom! i say!")
+		cli.ShowAppHelp(c)
 		return nil
 	},
 }
 
 func AddCommand(cmd *cli.Command) {
-	rootApp.Commands = append(rootApp.Commands, cmd)
-}
-
-func Run() error {
-	return rootApp.Run(os.Args)
+	App.Commands = append(App.Commands, cmd)
 }

@@ -34,7 +34,7 @@ var initCmd = &cli.Command{
 		c.Command.HasName("wop")
 		c.Command.Names()
 		c.Command.VisibleFlags()
-		fmt.Fprintf(c.App.Writer, "dodododododoodododddooooododododooo\n")
+		fmt.Fprintf(c.App.Writer, "ddodododooo\n")
 		if c.Bool("forever") {
 			c.Command.Run(c)
 		}
