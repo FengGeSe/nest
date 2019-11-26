@@ -1,0 +1,8 @@
+.*.swp  
+.*.swo  
+*.iml   
+.idea   
+.history    
+.vscode
+
+nest
