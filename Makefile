@@ -6,6 +6,7 @@ GO_VERSION=$(shell go version  | awk '{print $$3}')
 BUILD_TIME=$(shell date +%FT%T%z)
 OS_ARCH=$(shell go version  | awk '{print $$4}')
 GIT_COMMIT=$(shell git rev-parse HEAD)
+CGO_ENABLED=0
 
 LDFLAGS=-X main._version=$(VERSION) -X main._goVersion=$(GO_VERSION) -X main._buildTime=$(BUILD_TIME) -X main._osArch=$(OS_ARCH) -X main._gitCommit=$(GIT_COMMIT)
 
@@ -22,7 +23,7 @@ build:
 
 ## build-linux: Compile the linux binary.
 build-linux:
-	@GOOS=linux GOARCH=amd64 go build -v -o $(PROJECT_NAME) -ldflags "-X main._version=$(VERSION)"
+	@CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 go build -v -o $(PROJECT_NAME) -ldflags "-X main._version=$(VERSION)"
 
 ## run: Build and run
 run: build
