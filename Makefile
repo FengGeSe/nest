@@ -7,6 +7,7 @@ BUILD_TIME=$(shell date +%FT%T%z)
 OS_ARCH=$(shell go version  | awk '{print $$4}')
 GIT_COMMIT=$(shell git rev-parse HEAD)
 CGO_ENABLED=0
+GO_BIN=$(GOBIN)
 
 LDFLAGS=-X main._version=$(VERSION) -X main._goVersion=$(GO_VERSION) -X main._buildTime=$(BUILD_TIME) -X main._osArch=$(OS_ARCH) -X main._gitCommit=$(GIT_COMMIT)
 
@@ -20,6 +21,11 @@ help: Makefile
 ## build: Compile the binary.
 build:
 	@go build -o $(PROJECT_NAME) -ldflags "$(LDFLAGS)"
+
+## install: build and install.
+install:
+	@go build -o $(PROJECT_NAME) -ldflags "$(LDFLAGS)" 
+	@mv $(PROJECT_NAME) $(GO_BIN)
 
 ## build-linux: Compile the linux binary.
 build-linux:
