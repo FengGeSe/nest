@@ -1,22 +1,21 @@
 package cmd
 
 import (
-	"github.com/urfave/cli/v2"
+	"os"
+
+	"github.com/spf13/cobra"
 )
 
-func init() {
-
-}
-
-var App = &cli.App{
-	Name:  "nest",
-	Usage: "Nest is a tool for helping develop with go-kit app framework.",
-	Action: func(c *cli.Context) error {
-		cli.ShowAppHelp(c)
-		return nil
+var rootCmd = &cobra.Command{
+	Use:   "nest",
+	Short: "Nest is a tool for helping develop with go-kit app framework.",
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
 	},
 }
 
-func AddCommand(cmd *cli.Command) {
-	App.Commands = append(App.Commands, cmd)
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }

@@ -11,32 +11,8 @@ import (
 	_ "github.com/FengGeSe/nest/statik"
 )
 
-var app = cmd.App
-
-var (
-	_version   = "unknown"
-	_gitCommit = "unknown"
-	_goVersion = "unknown"
-	_buildTime = "unknown"
-	_osArch    = "unknown"
-)
-
-func init() {
-	app.Writer = os.Stdout
-	app.ErrWriter = os.Stderr
-	app.Version = _version
-	app.HideVersion = true
-	app.Description = fmt.Sprintf(`Version:          %s
-   Go version:       %s
-   Git commit:       %s
-   Built:            %s
-   OS/Arch:          %s`, _version, _goVersion, _gitCommit, _buildTime, _osArch)
-}
-
 func main() {
-	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)
-	}
+	cmd.Execute()
 }
 
 func WalkStatikFs() {
