@@ -23,19 +23,23 @@ help: Makefile
 	
 ## build: Compile the binary.
 build:
+	@go generate
 	@go build -o $(PROJECT_NAME) -ldflags "$(LDFLAGS)"
 
 ## install: build and install.
 install:
+	@go generate
 	@go build -o $(PROJECT_NAME) -ldflags "$(LDFLAGS)" 
 	@mv $(PROJECT_NAME) $(GO_BIN)
 
 ## build-linux: Compile the linux binary.
 build-linux:
+	@go generate
 	@CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 go build -o $(PROJECT_NAME) -ldflags "$(LDFLAGS)"
 
 ## run: Build and run
 run: build
+	@go generate
 	@./$(PROJECT_NAME)
 
 ## clean: Clean build files.

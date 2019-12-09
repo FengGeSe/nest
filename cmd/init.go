@@ -2,11 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 
-	"github.com/FengGeSe/nest/util"
+	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cobra"
+
+	_ "github.com/FengGeSe/nest/statik"
+	"github.com/FengGeSe/nest/util"
 )
 
 // flags
@@ -66,17 +71,56 @@ var initCmd = &cobra.Command{
 			Name: name,
 		}
 
-		if err := InitProject(opts.Path, project, opts.Force); err != nil {
+		statikFS, err := fs.New()
+		if err != nil {
 			return err
 		}
 
+		walkFunc := CreateRenderWalkFunc(opts, statikFS, project)
+		if err := fs.Walk(statikFS, "/", walkFunc); err != nil {
+			return err
+		}
 		cmd.Printf("project(%s) created in %s \n", project.Name, opts.Path)
 		return nil
 	},
 }
 
-// 在absPath目录下初始化项目结构
-func InitProject(absPath string, project Project, force bool) error {
+func CreateRenderWalkFunc(options *initOptions, statikFS http.FileSystem, project Project) func(path string, info os.FileInfo, err error) error {
+
+	return func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return NewDir(options.Path+path, options.Force)
+		}
+		tpl_data, err := fs.ReadFile(statikFS, path)
+		if err != nil {
+			return err
+		}
+		data, err := util.Render(string(tpl_data), project)
+		if err != nil {
+			return err
+		}
+		return NewFile(options.Path+path, data, options.Force)
+	}
+}
+
+func NewFile(absPath string, data []byte, force bool) error {
+	isExist, err := PathExists(absPath)
+	if err != nil {
+		return err
+	}
+	if isExist && !force {
+		fmt.Printf("file(%s) already exists\n", absPath)
+		return nil
+	}
+
+	if err := ioutil.WriteFile(absPath, data, 0644); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewDir(absPath string, force bool) error {
 	// 目录存在报错 不存在创建
 	if isExist, err := PathExists(absPath); err != nil {
 		return err
@@ -87,7 +131,6 @@ func InitProject(absPath string, project Project, force bool) error {
 			return err
 		}
 	}
-
 	if err := os.MkdirAll(absPath, os.ModePerm); err != nil {
 		return err
 	}
