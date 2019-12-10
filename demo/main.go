@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -12,6 +13,14 @@ import (
 
 	_ "demo/router/grpc"
 	_ "demo/router/http"
+)
+
+var (
+	_version   = "unknown"
+	_gitCommit = "unknown"
+	_goVersion = "unknown"
+	_buildTime = "unknown"
+	_osArch    = "unknown"
 )
 
 func init() {
@@ -26,10 +35,13 @@ func init() {
 		TimestampFormat: "2005-01-02 15:04:05",
 	})
 
-	log.WithFields(log.Fields{
-		"http-addr": conf.HttpAddr,
-		"grpc-addr": conf.GrpcAddr,
-	}).Info("run flags:")
+	fmt.Printf(`Application Info:   
+   Version:          %s
+   Go version:       %s
+   Git commit:       %s
+   Built:            %s
+   OS/Arch:          %s`, _version, _goVersion, _gitCommit, _buildTime, _osArch)
+	fmt.Println()
 }
 
 func main() {
