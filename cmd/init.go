@@ -86,7 +86,6 @@ var initCmd = &cobra.Command{
 }
 
 func CreateRenderWalkFunc(options *initOptions, statikFS http.FileSystem, project Project) func(path string, info os.FileInfo, err error) error {
-
 	return func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return NewDir(options.Path+path, options.Force)
