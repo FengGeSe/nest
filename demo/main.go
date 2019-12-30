@@ -3,9 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
-	log "github.com/sirupsen/logrus"
+	log "demo/log"
 
 	conf "demo/conf"
 	grpc "demo/server/grpc"
@@ -29,12 +28,6 @@ func init() {
 	flag.StringVar(&conf.GrpcAddr, "grpc-addr", conf.GetEnv("GrpcAddr", "0.0.0.0:5000"), "grpc服务地址")
 
 	// log
-	log.SetOutput(os.Stdout)
-	log.SetLevel(log.InfoLevel)
-	log.SetFormatter(&log.TextFormatter{
-		TimestampFormat: "2005-01-02 15:04:05",
-	})
-
 	fmt.Printf(`Application Info:   
    Version:          %s
    Go version:       %s
@@ -51,15 +44,15 @@ func main() {
 
 	// http server
 	{
-		log.WithField("http-addr", conf.HttpAddr).Info("http server is running...")
+		log.Info("http server is running...", log.Field("http-addr", conf.HttpAddr))
 		go http.Run(conf.HttpAddr, errc)
 	}
 
 	// grpc server
 	{
-		log.WithField("grpc-addr", conf.GrpcAddr).Info("grpc server is running...")
+		log.Info("grpc server is running...", log.Field("grpc-addr", conf.GrpcAddr))
 		go grpc.Run(conf.GrpcAddr, errc)
 	}
 
-	log.WithField("error", <-errc).Info("Exit")
+	log.Error("Exit", log.Field("error", <-errc))
 }

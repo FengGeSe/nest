@@ -8,6 +8,7 @@ require (
 	github.com/golang/protobuf v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/sirupsen/logrus v1.4.2
-	golang.org/x/net v0.0.0-20190311183353-d8887717615a
+	go.uber.org/zap v1.13.0
+	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
 	google.golang.org/grpc v1.22.1
 )
