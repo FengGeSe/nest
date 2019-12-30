@@ -40,7 +40,7 @@ func init() {
 }
 
 func SetLevel(s string) {
-	var level zapcore.Level
+	level := zapcore.InfoLevel
 	switch s {
 	case "debug":
 		level = zapcore.DebugLevel
@@ -57,10 +57,7 @@ func SetLevel(s string) {
 	case "fatal":
 		level = zapcore.FatalLevel
 	}
-	if level, ok := levelMap[s]; ok {
-		automicLevel.SetLevel(level)
-	}
-	automicLevel.SetLevel(zapcore.InfoLevel)
+	automicLevel.SetLevel(level)
 }
 
 func Field(key string, val interface{}) zap.Field {
